@@ -8,7 +8,7 @@ import axios from 'axios';
 import { CloudUpload } from 'lucide-react';
 
 function AddProduct() {
-  const [slug,setSlug]=useState('')
+   const [slug,setSlug]=useState('')
    const [des,setDes]=useState('')
    const [image,setImage]=useState('')
    const [form] = Form.useForm();
@@ -22,12 +22,9 @@ function AddProduct() {
         
     })
     }
-    
   },[quill])
 
   const onFinish =async (values) => {
-  
-  
   
   let data=await axios.post(`${import.meta.env.VITE_LOCAL_API}/api/v1/product/addproduct`,
     {
@@ -51,7 +48,6 @@ function AddProduct() {
       }else if(data.data.error=="Product already exist"){
         toast.error('Product already exist')
       }
-  
 }
 
 const onFinishFailed = errorInfo => {
@@ -104,8 +100,7 @@ let handleImage=(e)=>{
   <div style={{ width: 530, height: 100, marginBottom: 120 }}>
     <div ref={quillRef} />
   </div>
-</div>
-     
+</div>    
 
     <Form.Item
       label="Image"
