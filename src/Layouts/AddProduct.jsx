@@ -1,6 +1,6 @@
 import { Button, ConfigProvider, Form, Input } from 'antd';
 import { useEffect, useState } from 'react';
-import slugify from 'react-slugify';
+import slugify from 'slugify';
 import {toast, ToastContainer } from 'react-toastify';
 import { useQuill } from 'react-quilljs';
 import 'quill/dist/quill.snow.css';
@@ -113,7 +113,7 @@ let handleImage=(e)=>{
     <Form.Item
       label="Regular Price"
       name="regularprice"
-      rules={[{ required: true, message: 'Please input your Regular Price!' }]}
+      rules={[{ required: true, message: 'Please input your Regular Price!'}]}
     >
       <Input />
     </Form.Item>

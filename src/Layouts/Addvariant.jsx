@@ -1,6 +1,6 @@
 import { Button, ConfigProvider, Form, Input } from 'antd';
 import { useEffect, useState } from 'react';
-import slugify from 'react-slugify';
+import slugify from 'slugify';
 import {toast, ToastContainer } from 'react-toastify';
 import { useQuill } from 'react-quilljs';
 import 'quill/dist/quill.snow.css';

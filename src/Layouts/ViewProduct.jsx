@@ -1,7 +1,7 @@
 import { Flex, Space, Table, Tag } from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import slugify from 'react-slugify';
+import slugify from 'slugify';
 
 
 function ViewProduct() {
