@@ -12,5 +12,8 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
+  optimizeDeps: {
+    include: ['react-quilljs', 'quill'],
+  },
 
 })
