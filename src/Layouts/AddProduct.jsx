@@ -29,7 +29,7 @@ function AddProduct() {
   
   
   
-  let data=await axios.post(`${import.meta.env.VITE_LOCAL_API}http://localhost:8000/api/v1/product/addproduct`,
+  let data=await axios.post(`${import.meta.env.VITE_LOCAL_API}/api/v1/product/addproduct`,
     {
      name:values.productname,
      description:des,
