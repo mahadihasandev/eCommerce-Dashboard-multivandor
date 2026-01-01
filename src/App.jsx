@@ -11,7 +11,7 @@ import {
 import Otp from './Layouts/Otp';
 import Login from './Layouts/Login';
 import Error from './Layouts/Error';
-import ChangePassword from './Layouts/Changepassword';
+import ChangePassword from './Layouts/ChangePassword'
 import ForgetPassword from './Layouts/ForgetPassword';
 import Home from './Layouts/Home';
 import ViewCategory from './Layouts/ViewCategory';
