@@ -29,6 +29,7 @@ function AddBannar() {
       toast.success("Banner created successfully");
       
       form.resetFields();
+      setDes('')
     }
   };
 
@@ -61,8 +62,9 @@ function AddBannar() {
           autoComplete="off"
         >
           <Form.Item
-            label="Product Name"
+            label="Banner Name"
             name="productname"
+            
             rules={[
               { required: true, message: "Please input your Banner Title!" },
             ]}
@@ -74,7 +76,12 @@ function AddBannar() {
             <label className="w-[130px] pt-0.5" htmlFor="description">
               Description :
             </label>
-            <textarea className="h-30 border w-full p-3 mb-5 outline-none focus:ring-2 focus:ring-blue-500 rounded-lg" type="text" onChange={(e)=>(setDes(e.target.value))}/>
+            <textarea className="h-30 border w-full p-3 mb-5 outline-none focus:ring-2 focus:ring-blue-500 rounded-lg" 
+            type="text" 
+            onChange={(e)=>(setDes(e.target.value))}
+            value={des}
+            placeholder="Description"
+            />
           </div>
 
           <Form.Item
