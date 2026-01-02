@@ -1,4 +1,3 @@
-
 import { ToastContainer, toast } from "react-toastify";
 import { Button, Checkbox, Form, Input } from "antd";
 import axios from "axios";
@@ -8,7 +7,7 @@ import { authInfo } from "../Slices/AuthSlices";
 
 function Login() {
   let navigate = useNavigate();
-  let dispatch=useDispatch()
+  let dispatch = useDispatch();
 
   const onFinish = async (values) => {
     let data = await axios.post(`${import.meta.env.VITE_LOCAL_API}/api/v1/auth/login`, {
@@ -16,89 +15,106 @@ function Login() {
       password: values.password,
     });
 
-    dispatch(authInfo(data.data))
-    
-    
-    localStorage.setItem('userinfo',JSON.stringify(data.data))
-    
+    dispatch(authInfo(data.data));
+    localStorage.setItem("userinfo", JSON.stringify(data.data));
+
     if (data.data.error == "user does not exist") {
       toast.error(data.data.error);
     } else if (!data.data.emailVerified) {
-      toast.error("varify your email");
-    }else if(data.data.role=='user'){
-        toast.error('Please Upgrade to merchant to login')
-    }else {
+      toast.error("verify your email");
+    } else if (data.data.role == "user") {
+      toast.error("Please Upgrade to merchant to login");
+    } else {
       navigate("/dashboard/viewbanner");
       toast.success("Login success");
     }
   };
+
   const onFinishFailed = (errorInfo) => {
     navigate(`/error/${errorInfo}`);
   };
 
   return (
-    <div>
-      <div className="flex flex-col pt-48 pr-48 items-center bg-[#0c3635] h-screen">
-        <h1 className="mb-5 ml-24 text-[#ffffff] font-sans">
-          {" "}
-          Dashboard Registration
-        </h1>
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 via-[#0c3635] to-slate-900 px-4">
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        theme="colored"
+      />
 
-        <ToastContainer
-          position="top-right"
-          autoClose={4000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss={false}
-          draggable
-          pauseOnHover={false}
-          theme="light"
-        />
+      {/* Modern Login Card */}
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-lg border border-white/10 p-8 rounded-2xl shadow-2xl">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold text-white tracking-tight">
+            Merchant Login
+          </h1>
+          <p className="text-slate-300 mt-2 text-sm">
+            Enter your credentials to access the dashboard
+          </p>
+        </div>
 
         <Form
           name="basic"
-          labelCol={{ span: 7 }}
-          wrapperCol={{ span: 17 }}
-          style={{ maxWidth: 400 }}
+          layout="vertical"
           initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
+          requiredMark={false}
         >
           <Form.Item
-            label={
-              <span style={{ color: "#ffffff", paddingRight: "25px" }}>
-                Email
-              </span>
-            }
+            label={<span className="text-slate-200 font-medium">Email Address</span>}
             name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
-            <Input style={{ width: "180%", padding: "10px" }} />
+            <Input 
+              placeholder="name@company.com"
+              className="h-12 rounded-lg border-slate-600 bg-white/5 text-white placeholder:text-slate-500 hover:border-emerald-400 focus:border-emerald-400" 
+            />
           </Form.Item>
 
           <Form.Item
-            label={<span style={{ color: "#ffffff" }}>Password</span>}
+            label={<span className="text-slate-200 font-medium">Password</span>}
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input.Password style={{ width: "180%", padding: "10px" }} />
+            <Input.Password 
+              placeholder="••••••••"
+              className="h-12 rounded-lg border-slate-600 bg-white/5 text-white placeholder:text-slate-500 hover:border-emerald-400 focus:border-emerald-400" 
+            />
           </Form.Item>
 
-          <Form.Item name="remember" valuePropName="checked" label={null}>
-            <Checkbox style={{ color: "#ffffff" }}>Remember me</Checkbox>
-          </Form.Item>
+          <div className="flex items-center justify-between mb-6">
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox className="text-slate-300">Remember me</Checkbox>
+            </Form.Item>
+            <Link 
+              to="/forgetpassword" 
+              className="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+            >
+              Forgot password?
+            </Link>
+          </div>
 
-          <Form.Item label={null}>
-            <Button type="primary" htmlType="submit">
-              Submit
+          <Form.Item>
+            <Button 
+              type="primary" 
+              htmlType="submit" 
+              className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 border-none rounded-lg text-base font-semibold shadow-lg shadow-emerald-900/20 transition-all"
+            >
+              Sign In
             </Button>
           </Form.Item>
+
+          <div className="mt-6 text-center border-t border-white/10 pt-6">
+            <p className="text-slate-400 text-sm">
+              New here? 
+              <Link to="/" className="ml-2 text-emerald-400 hover:text-emerald-300 font-medium transition-colors underline">
+                Create an account
+              </Link>
+            </p>
+          </div>
         </Form>
-        <Link to="/forgetpassword">Forget password ?</Link>
-        <Link to="/">Registration ?</Link>
       </div>
     </div>
   );
