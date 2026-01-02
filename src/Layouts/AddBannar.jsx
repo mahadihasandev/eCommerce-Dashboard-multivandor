@@ -1,8 +1,6 @@
 import { Button, ConfigProvider, Form, Input } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { useQuill } from "react-quilljs";
-import "quill/dist/quill.snow.css";
 import axios from "axios";
 import { CloudUpload } from "lucide-react";
 
@@ -11,15 +9,9 @@ function AddBannar() {
   const [image, setImage] = useState("");
   const [form] = Form.useForm();
 
-  const { quill, quillRef } = useQuill();
+ 
 
-  useEffect(() => {
-    if (quill) {
-      quill.on("text-change", function () {
-        setDes(quill.root.textContent);
-      });
-    }
-  }, [quill]);
+
 
   const onFinish = async (values) => {
     let data = await axios.post(
@@ -35,7 +27,7 @@ function AddBannar() {
     );
     if (data.data.success == "Banner created successfully") {
       toast.success("Banner created successfully");
-      quill.setText("");
+      
       form.resetFields();
     }
   };
@@ -78,14 +70,11 @@ function AddBannar() {
              <Input/>
           </Form.Item>
 
-          <div className="flex items-start ml-40 mt-10">
-            <label className="w-[120px] pt-0.5" htmlFor="description">
+          <div className="flex items-start justify-center ml-40 mt-10 ">
+            <label className="w-[130px] pt-0.5" htmlFor="description">
               Description :
             </label>
-
-            <div style={{ width: 530, height: 100, marginBottom: 120 }}>
-              <div ref={quillRef} />
-            </div>
+            <textarea className="h-30 border w-full p-3 mb-5 outline-none focus:ring-2 focus:ring-blue-500 rounded-lg" type="text" onChange={(e)=>(setDes(e.target.value))}/>
           </div>
 
           <Form.Item
