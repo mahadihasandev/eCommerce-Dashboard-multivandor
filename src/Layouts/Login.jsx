@@ -98,6 +98,7 @@ function Login() {
           </Form.Item>
         </Form>
         <Link to="/forgetpassword">Forget password ?</Link>
+        <Link to="/">Registration ?</Link>
       </div>
     </div>
   );

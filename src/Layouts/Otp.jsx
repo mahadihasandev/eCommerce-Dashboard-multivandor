@@ -14,7 +14,7 @@ const params=useParams()
       otp:params.otpcode,
     })
     
-    if(otpInfo.data=="otp match"){
+    if(otpInfo.data.success=="otp match"){
       navigate('/login')
      }else{
     navigate(`/error/${otpInfo.data.error}`)

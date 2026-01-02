@@ -19,8 +19,8 @@ const onFinish =async values => {
     headers:{auth:"12345678"}
   })
 
-  if(data.data.error){
-    toast.error(data.data.error)
+  if(data.data.error=="Please enter a valid otp"){
+    toast.error("Please enter a valid otp")
   }else{
     
     toast.success("Registration done Very your Email")
