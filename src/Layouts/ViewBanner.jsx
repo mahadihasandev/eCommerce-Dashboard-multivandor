@@ -31,7 +31,7 @@ useEffect(()=>{
 ,[refresh])
 
 const handleDelete=async(item)=>{ 
- let deleteData=await axios.delete(`${import.meta.env.VITE_LOCAL_API}/api/v1/product/deletebanner${item}`)
+ let deleteData=await axios.delete(`${import.meta.env.VITE_LOCAL_API}/api/v1/product/deletebanner/${item}`)
   setRefresh(deleteData.data)
 }
 

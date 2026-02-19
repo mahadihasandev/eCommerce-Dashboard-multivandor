@@ -24,6 +24,8 @@ import ViewVariant from './Layouts/ViewVariant';
 import Addvariant from './Layouts/Addvariant';
 import AddBannar from './Layouts/AddBannar';
 import ViewBanner from './Layouts/ViewBanner';
+import AddDiscount from './Layouts/AddDiscount';
+import ViewDiscount from './Layouts/ViewDiscount';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,6 +47,8 @@ const router = createBrowserRouter(
         <Route path='addvariant' element={<Addvariant/>}></Route>
         <Route path='addbannar' element={<AddBannar/>}></Route>
         <Route path='viewbanner' element={<ViewBanner/>}></Route>
+        <Route path='adddiscount' element={<AddDiscount/>}></Route>
+        <Route path='viewdiscount' element={<ViewDiscount/>}></Route>
      </Route>
     </>
   )

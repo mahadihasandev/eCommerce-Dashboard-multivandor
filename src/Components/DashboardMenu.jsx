@@ -88,8 +88,8 @@ function DashboardMenu() {
       label: 'Discount',
       icon: <SettingOutlined />,
       children: [
-        { key: '13', label: 'View Discount' },
-        { key: '14', label: 'Add Discount' },
+        { key: '/dashboard/viewdiscount', label: 'View Discount' },
+        { key: '/dashboard/adddiscount', label: 'Add Discount' },
       ],
     },
   ].filter(Boolean); 

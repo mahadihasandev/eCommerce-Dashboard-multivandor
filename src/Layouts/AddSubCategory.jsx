@@ -5,20 +5,23 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useState } from "react";
+import slugify from "slugify";
 
 function AddSubCategory() {
   const userData = useSelector((state) => state.activeUser);
-  let [viewCategorys,setViewCategorys]=useState([])
-  let [categoryId,setCategoryId]=useState('')
-  
+  let [viewCategorys, setViewCategorys] = useState([]);
+  let [categoryId, setCategoryId] = useState("");
+  let [slug, setSlug] = useState("");
+
   const onFinish = async (values) => {
     let data = await axios.post(
       `${import.meta.env.VITE_LOCAL_API}/api/v1/product/addsubcategory`,
       {
         name: values.subcategory,
         ownerId: userData.value.id,
-        categoryId:categoryId,
-      }
+        categoryId: categoryId,
+        slug: slugify(slug),
+      },
     );
     if (data.data.success == "SubCategory has been Created") {
       toast.success(data.data.success);
@@ -39,22 +42,22 @@ function AddSubCategory() {
     console.log("search:", value);
   };
 
-useEffect(()=>{
-  let viewCategory=async ()=>{
-    let viewCategoryData=await axios.get(`${import.meta.env.VITE_LOCAL_API}/api/v1/product/viewcategory`)
-    let arr=[] 
-    viewCategoryData.data.map((item)=>{
-      arr.push(
-        {
-              value: item._id,
-              label: item.name,
-            }
-      )
-    })  
-    setViewCategorys(arr)
-  }
-  viewCategory()
-},[])
+  useEffect(() => {
+    let viewCategory = async () => {
+      let viewCategoryData = await axios.get(
+        `${import.meta.env.VITE_LOCAL_API}/api/v1/product/viewcategory`,
+      );
+      let arr = [];
+      viewCategoryData.data.map((item) => {
+        arr.push({
+          value: item._id,
+          label: item.name,
+        });
+      });
+      setViewCategorys(arr);
+    };
+    viewCategory();
+  }, []);
 
   return (
     <div>
@@ -63,10 +66,8 @@ useEffect(()=>{
           showSearch={{ optionFilterProp: "label", onSearch }}
           placeholder="Select Category"
           onChange={onChange}
-          style={{ width: 506,marginLeft:"120px",marginBottom:"20px" }}
-          options={
-            viewCategorys
-          }
+          style={{ width: 506, marginLeft: "120px", marginBottom: "20px" }}
+          options={viewCategorys}
         />
         <Form
           name="basic"
@@ -87,8 +88,23 @@ useEffect(()=>{
             name="subcategory"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
-            <Input style={{ width: "180%", padding: "10px" }} />
+            <Input
+              onChange={(e) => setSlug(e.target.value)}
+              style={{ width: "180%", padding: "10px" }}
+            />
           </Form.Item>
+          <div className="flex items-center pt-2">
+            <label className="ml-10" htmlFor="slug">
+              Slug : <span />
+              <input
+                className="border border-gray-300 rounded-md px-4 py-1 ml-10 mb-5"
+                id="slug"
+                defaultValue={slugify(slug)}
+                type="text"
+                disabled
+              />
+            </label>
+          </div>
 
           <Form.Item label={null}>
             <Button type="primary" htmlType="submit">
