@@ -11,8 +11,6 @@ function AddBannar() {
   const [viewProduct, setViewProduct] = useState([]);
   const [productSlug, setProductSlug] = useState("");
   console.log(productSlug);
-  
-  
 
   const onFinish = async (values) => {
     let data = await axios.post(
@@ -40,7 +38,6 @@ function AddBannar() {
   };
 
   const onChange = (value, option) => {
-
     setProductSlug(option.slug);
   };
 
@@ -64,7 +61,7 @@ function AddBannar() {
         arr.push({
           value: item._id,
           label: item.name,
-          slug: item.slug,
+          slug: item._id,
         });
       });
       setViewProduct(arr);
@@ -101,15 +98,15 @@ function AddBannar() {
           >
             <Input />
           </Form.Item>
-            <div className="ml-32">
-              <label  htmlFor="productname">Product Name :</label>
-          <Select
-            showSearch={{ optionFilterProp: "label", onSearch }}
-            placeholder="Select Product"
-            onChange={onChange}
-            style={{ width: 506, marginLeft: "10px", marginBottom: "20px" }}
-            options={viewProduct}
-          />
+          <div className="ml-32">
+            <label htmlFor="productname">Product Name :</label>
+            <Select
+              showSearch={{ optionFilterProp: "label", onSearch }}
+              placeholder="Select Product"
+              onChange={onChange}
+              style={{ width: 506, marginLeft: "10px", marginBottom: "20px" }}
+              options={viewProduct}
+            />
           </div>
 
           <div className="flex items-start justify-center ml-40 mt-10 ">
