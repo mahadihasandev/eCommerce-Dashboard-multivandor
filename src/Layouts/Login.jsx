@@ -21,24 +21,27 @@ function Login() {
         email: values.email,
         password: values.password,
       });
+      const loginData = data?.data;
 
-      if (data.data.error === "user does not exist") {
-        toast.error(data.data.error);
-      } else if (!data.data.emailVerified) {
+      if (!loginData) {
+        toast.error("Unexpected login response");
+      } else if (loginData.error === "user does not exist") {
+        toast.error(loginData.error);
+      } else if (!loginData.emailVerified) {
         toast.error("verify your email");
-      } else if (data.data.role === "user") {
+      } else if (loginData.role === "user") {
         toast.error("Please Upgrade to merchant to login");
       } else {
         const safeUserInfo = {
-          id: data.data.id,
-          username: data.data.username,
-          email: data.data.email,
-          role: data.data.role,
-          emailVerified: data.data.emailVerified,
+          id: loginData.id,
+          username: loginData.username,
+          email: loginData.email,
+          role: loginData.role,
+          emailVerified: loginData.emailVerified,
         };
+        navigate("/dashboard/viewbanner");
         dispatch(authInfo(safeUserInfo));
         localStorage.setItem("userinfo", JSON.stringify(safeUserInfo));
-        navigate("/dashboard/viewbanner");
         toast.success("Login success");
       }
     } catch (error) {

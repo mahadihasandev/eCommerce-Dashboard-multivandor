@@ -33,8 +33,10 @@ function Registration() {
 
       if (data?.data?.error) {
         toast.error(data.data.error);
-      } else {
+      } else if (data?.status >= 200 && data?.status < 300) {
         toast.success("Registration done. Verify your email");
+      } else {
+        toast.error("Registration failed");
       }
     } catch (error) {
       toast.error(error?.response?.data?.error || "Registration failed");
