@@ -31,12 +31,14 @@ function Registration() {
         }
       );
 
-      if (data?.data?.error) {
-        toast.error(data.data.error);
-      } else if (data?.status >= 200 && data?.status < 300) {
-        toast.success("Registration done. Verify your email");
-      } else {
+      const isSuccessStatus = data?.status >= 200 && data?.status < 300;
+
+      if (!isSuccessStatus) {
         toast.error("Registration failed");
+      } else if (data?.data?.error) {
+        toast.error(data.data.error);
+      } else {
+        toast.success("Registration done. Verify your email");
       }
     } catch (error) {
       toast.error(error?.response?.data?.error || "Registration failed");

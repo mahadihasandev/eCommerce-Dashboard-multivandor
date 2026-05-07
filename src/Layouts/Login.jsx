@@ -26,7 +26,7 @@ function Login() {
       if (!loginData) {
         toast.error("Unexpected login response");
       } else if (loginData.error === "user does not exist") {
-        toast.error(loginData.error);
+        toast.error("User does not exist");
       } else if (!loginData.emailVerified) {
         toast.error("verify your email");
       } else if (loginData.role === "user") {
