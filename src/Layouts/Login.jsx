@@ -8,30 +8,39 @@ import { authInfo } from "../Slices/AuthSlices";
 function Login() {
   let navigate = useNavigate();
   let dispatch = useDispatch();
+  const apiBaseUrl = import.meta.env.VITE_LOCAL_API;
 
   const onFinish = async (values) => {
-    let data = await axios.post(`${import.meta.env.VITE_LOCAL_API}/api/v1/auth/login`, {
-      email: values.email,
-      password: values.password,
-    });
+    if (!apiBaseUrl) {
+      toast.error("API URL is missing. Set VITE_LOCAL_API in .env");
+      return;
+    }
 
-    dispatch(authInfo(data.data));
-    localStorage.setItem("userinfo", JSON.stringify(data.data));
+    try {
+      let data = await axios.post(`${apiBaseUrl}/api/v1/auth/login`, {
+        email: values.email,
+        password: values.password,
+      });
 
-    if (data.data.error == "user does not exist") {
-      toast.error(data.data.error);
-    } else if (!data.data.emailVerified) {
-      toast.error("verify your email");
-    } else if (data.data.role == "user") {
-      toast.error("Please Upgrade to merchant to login");
-    } else {
-      navigate("/dashboard/viewbanner");
-      toast.success("Login success");
+      if (data.data.error == "user does not exist") {
+        toast.error(data.data.error);
+      } else if (!data.data.emailVerified) {
+        toast.error("verify your email");
+      } else if (data.data.role == "user") {
+        toast.error("Please Upgrade to merchant to login");
+      } else {
+        dispatch(authInfo(data.data));
+        localStorage.setItem("userinfo", JSON.stringify(data.data));
+        navigate("/dashboard/viewbanner");
+        toast.success("Login success");
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.error || "Login failed");
     }
   };
 
-  const onFinishFailed = (errorInfo) => {
-    navigate(`/error/${errorInfo}`);
+  const onFinishFailed = () => {
+    toast.error("Please fill in required fields");
   };
 
   return (

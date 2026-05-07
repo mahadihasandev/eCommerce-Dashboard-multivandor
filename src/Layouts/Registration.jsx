@@ -5,26 +5,39 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 function Registration() {
+  const apiBaseUrl = import.meta.env.VITE_LOCAL_API;
 
   const onFinish = async (values) => {
-    let data = await axios.post(`${import.meta.env.VITE_LOCAL_API}/api/v1/auth/registration`, {
-      username: values.username,
-      email: values.email,
-      password: values.password
-    },
-    {
-      headers: { auth: "12345678" }
-    })
+    if (!apiBaseUrl) {
+      toast.error("API URL is missing. Set VITE_LOCAL_API in .env");
+      return;
+    }
 
-    if (data.data.error == "Please enter a valid otp") {
-      toast.error("Please enter a valid otp")
-    } else {
-      toast.success("Registration done. Verify your Email")
+    try {
+      let data = await axios.post(
+        `${apiBaseUrl}/api/v1/auth/registration`,
+        {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+        },
+        {
+          headers: { auth: "12345678" },
+        }
+      );
+
+      if (data?.data?.error) {
+        toast.error(data.data.error);
+      } else {
+        toast.success("Registration done. Verify your Email");
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.error || "Registration failed");
     }
   };
 
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
+  const onFinishFailed = () => {
+    toast.error("Please fill in required fields");
   };
 
   return (
