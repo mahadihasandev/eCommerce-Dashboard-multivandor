@@ -29,7 +29,7 @@ function Registration() {
       if (data?.data?.error) {
         toast.error(data.data.error);
       } else {
-        toast.success("Registration done. Verify your Email");
+        toast.success("Registration done. Verify your email");
       }
     } catch (error) {
       toast.error(error?.response?.data?.error || "Registration failed");

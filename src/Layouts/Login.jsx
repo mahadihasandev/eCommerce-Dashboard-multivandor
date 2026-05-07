@@ -22,11 +22,11 @@ function Login() {
         password: values.password,
       });
 
-      if (data.data.error == "user does not exist") {
+      if (data.data.error === "user does not exist") {
         toast.error(data.data.error);
       } else if (!data.data.emailVerified) {
         toast.error("verify your email");
-      } else if (data.data.role == "user") {
+      } else if (data.data.role === "user") {
         toast.error("Please Upgrade to merchant to login");
       } else {
         dispatch(authInfo(data.data));
