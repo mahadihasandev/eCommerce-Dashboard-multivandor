@@ -29,8 +29,15 @@ function Login() {
       } else if (data.data.role === "user") {
         toast.error("Please Upgrade to merchant to login");
       } else {
-        dispatch(authInfo(data.data));
-        localStorage.setItem("userinfo", JSON.stringify(data.data));
+        const safeUserInfo = {
+          id: data.data.id,
+          username: data.data.username,
+          email: data.data.email,
+          role: data.data.role,
+          emailVerified: data.data.emailVerified,
+        };
+        dispatch(authInfo(safeUserInfo));
+        localStorage.setItem("userinfo", JSON.stringify(safeUserInfo));
         navigate("/dashboard/viewbanner");
         toast.success("Login success");
       }

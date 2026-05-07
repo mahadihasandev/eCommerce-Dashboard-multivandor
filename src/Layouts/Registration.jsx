@@ -6,10 +6,15 @@ import { Link } from 'react-router-dom';
 
 function Registration() {
   const apiBaseUrl = import.meta.env.VITE_LOCAL_API;
+  const registrationAuthHeader = import.meta.env.VITE_REGISTRATION_AUTH_HEADER;
 
   const onFinish = async (values) => {
     if (!apiBaseUrl) {
       toast.error("API URL is missing. Set VITE_LOCAL_API in .env");
+      return;
+    }
+    if (!registrationAuthHeader) {
+      toast.error("Registration auth header is missing. Set VITE_REGISTRATION_AUTH_HEADER in .env");
       return;
     }
 
@@ -22,7 +27,7 @@ function Registration() {
           password: values.password,
         },
         {
-          headers: { auth: "12345678" },
+          headers: { auth: registrationAuthHeader },
         }
       );
 
