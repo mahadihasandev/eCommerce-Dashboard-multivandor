@@ -56,7 +56,7 @@ const userData = useSelector((state) => state.activeUser.value);
       arr.push({
         key:item._id,
         name:item.name,
-        tags:[userData.role]
+        tags:[userData?.role || '']
       })
       
     })
@@ -64,7 +64,7 @@ const userData = useSelector((state) => state.activeUser.value);
     
     }
     viewCatData()
-  },[userData.role])
+  },[userData?.role])
   return (
     <div className='mt-10'>
       <h1 className='text-center text-5xl mr-64 mb-5 font-sans font-semibold'>Category List</h1>
