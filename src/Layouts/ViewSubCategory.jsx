@@ -66,14 +66,14 @@ const userData = useSelector((state) => state.activeUser.value);
         key:item._id,
         name:item.name,
         category:item.categoryId.name,
-        tags:[userData.role]
+        tags:[userData?.role || '']
       })
       
     })
     setCatViewData(arr);    
     }
     viewCatData()
-  },[userData.role])
+  },[userData?.role])
   return (
    <div className='mt-10'>
     <h1 className='text-center text-5xl mr-64 mb-5 font-sans font-semibold'>Subcategory List</h1>

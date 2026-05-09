@@ -47,10 +47,10 @@ const router = createBrowserRouter(
         <Route path='viewdiscount' element={<ViewDiscount/>}></Route>
      </Route>
       {/* <Route path="/otp/:email/:otpcode" element={<Otp/>}></Route>
-     <Route path='/login' element={<Login/>}></Route>
      <Route path='/error/:error' element={<Error/>}></Route>
      <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
      <Route path='/changepassword' element={<ChangePassword/>}></Route> */}
+     <Route path='/login' element={<Login/>}></Route>
     </>
   )
 );
