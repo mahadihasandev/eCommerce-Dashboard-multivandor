@@ -1,19 +1,16 @@
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
-import { useDispatch, useSelector } from 'react-redux'; 
+import { useDispatch } from 'react-redux'; 
 import { useNavigate } from 'react-router-dom';
 import { authInfo } from '../Slices/AuthSlices';
 
 function DashboardMenu() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
-  
-  const userinfo = useSelector((state)=>(state.activeUser.value))
   const handleLogout = () => {
     localStorage.removeItem('userinfo');
     dispatch(authInfo(null));
-    navigate('/login'); 
+    navigate('/'); 
   };
 
   const onClick = (e) => {
