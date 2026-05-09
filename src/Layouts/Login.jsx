@@ -25,7 +25,7 @@ function Login() {
     } else if (data.data.role == "user") {
       toast.error("Please Upgrade to merchant to login");
     } else {
-      navigate("/dashboard/viewbanner");
+      navigate("/viewbanner");
       toast.success("Login success");
     }
   };
