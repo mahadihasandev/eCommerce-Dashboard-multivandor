@@ -30,13 +30,9 @@ import ViewDiscount from './Layouts/ViewDiscount';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-     <Route path="/" element={<Registration/>}></Route>
-     <Route path="/otp/:email/:otpcode" element={<Otp/>}></Route>
-     <Route path='/login' element={<Login/>}></Route>
-     <Route path='/error/:error' element={<Error/>}></Route>
-     <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
-     <Route path='/changepassword' element={<ChangePassword/>}></Route>
-     <Route path='/dashboard' element={<Home/>}>
+     {/* <Route path="/" element={<Registration/>}></Route> */}
+    
+     <Route path='/' element={<Home/>}>
         <Route path='viewcategory' element={<ViewCategory/>}></Route>
         <Route path='viewsubcategory' element={<ViewSubCategory/>}></Route>
         <Route path='addcategory' element={<AddCategory/>}></Route>
@@ -50,6 +46,11 @@ const router = createBrowserRouter(
         <Route path='adddiscount' element={<AddDiscount/>}></Route>
         <Route path='viewdiscount' element={<ViewDiscount/>}></Route>
      </Route>
+      <Route path="/otp/:email/:otpcode" element={<Otp/>}></Route>
+     <Route path='/login' element={<Login/>}></Route>
+     <Route path='/error/:error' element={<Error/>}></Route>
+     <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
+     <Route path='/changepassword' element={<ChangePassword/>}></Route>
     </>
   )
 );

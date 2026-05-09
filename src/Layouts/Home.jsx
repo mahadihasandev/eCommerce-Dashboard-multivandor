@@ -10,10 +10,10 @@ function Home() {
     const userData=useSelector((state)=>(state.activeUser.value))
   let navigate=useNavigate()
  
- if(!userData){
-    navigate('/login')
+//  if(!userData){
+//     navigate('/login')
     
-  }
+//   }
 
   return (
     <div className='w-[1504px] mx-auto border-2 border-blue-300 h-screen'>
