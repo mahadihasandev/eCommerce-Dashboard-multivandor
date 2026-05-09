@@ -38,8 +38,8 @@ function DashboardMenu() {
       label: 'Category',
       icon: <AppstoreOutlined />,
       children: [
-        { key: '/dashboard/viewcategory', label: 'View Category' },
-        { key: '/dashboard/addcategory', label: 'Add Category' },
+        { key: '/viewcategory', label: 'View Category' },
+        { key: '/addcategory', label: 'Add Category' },
       ],
     },
     { type: 'divider' },
@@ -48,8 +48,8 @@ function DashboardMenu() {
       label: 'Sub Category',
       icon: <SettingOutlined />,
       children: [
-        { key: '/dashboard/viewsubcategory', label: 'View Subcategory' },
-        { key: '/dashboard/addsubcategory', label: 'Add Subcategory' },
+        { key: '/viewsubcategory', label: 'View Subcategory' },
+        { key: '/addsubcategory', label: 'Add Subcategory' },
       ],
     },
     { type: 'divider' },
@@ -58,8 +58,8 @@ function DashboardMenu() {
       label: 'Products',
       icon: <SettingOutlined />,
       children: [
-        { key: '/dashboard/viewproduct', label: 'View Products' },
-        { key: '/dashboard/addproduct', label: 'Add Products' },
+        { key: '/viewproduct', label: 'View Products' },
+        { key: '/addproduct', label: 'Add Products' },
       ],
     },
     { type: 'divider' },
@@ -68,8 +68,8 @@ function DashboardMenu() {
       label: 'Variant',
       icon: <SettingOutlined />,
       children: [
-        { key: '/dashboard/viewvariant', label: 'View Variant' },
-        { key: '/dashboard/addvariant', label: 'Add Variant' },
+        { key: '/viewvariant', label: 'View Variant' },
+        { key: '/addvariant', label: 'Add Variant' },
       ],
     },
     { type: 'divider' },
@@ -78,8 +78,8 @@ function DashboardMenu() {
       label: 'Banner',
       icon: <SettingOutlined />,
       children: [
-        { key: '/dashboard/viewbanner', label: 'View Banner' },
-        { key: '/dashboard/addbannar', label: 'Add Banner' },
+        { key: '/viewbanner', label: 'View Banner' },
+        { key: '/addbannar', label: 'Add Banner' },
       ],
     },
     { type: 'divider' },
@@ -88,8 +88,8 @@ function DashboardMenu() {
       label: 'Discount',
       icon: <SettingOutlined />,
       children: [
-        { key: '/dashboard/viewdiscount', label: 'View Discount' },
-        { key: '/dashboard/adddiscount', label: 'Add Discount' },
+        { key: '/viewdiscount', label: 'View Discount' },
+        { key: '/adddiscount', label: 'Add Discount' },
       ],
     },
   ].filter(Boolean); 
