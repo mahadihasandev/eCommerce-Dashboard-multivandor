@@ -3,6 +3,7 @@ import { Col, Row } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import DashboardMenu from '../Components/DashboardMenu';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 
 
@@ -10,10 +11,11 @@ function Home() {
     const userData=useSelector((state)=>(state.activeUser.value))
   let navigate=useNavigate()
  
-//  if(!userData){
-//     navigate('/login')
-    
-//   }
+  useEffect(()=>{
+    if(!userData){
+      navigate('/login')
+    }
+  },[userData, navigate])
 
   return (
     <div className='w-[1504px] mx-auto border-2 border-blue-300 h-screen'>

@@ -109,7 +109,7 @@ function Login() {
           <div className="mt-6 text-center border-t border-white/10 pt-6">
             <p className="text-slate-400 text-sm">
               New here? 
-              <Link to="/" className="ml-2 text-emerald-400 hover:text-emerald-300 font-medium transition-colors underline">
+              <Link to="/register" className="ml-2 text-emerald-400 hover:text-emerald-300 font-medium transition-colors underline">
                 Create an account
               </Link>
             </p>
