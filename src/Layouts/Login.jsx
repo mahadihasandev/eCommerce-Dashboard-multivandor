@@ -8,30 +8,49 @@ import { authInfo } from "../Slices/AuthSlices";
 function Login() {
   let navigate = useNavigate();
   let dispatch = useDispatch();
+  const apiBaseUrl = import.meta.env.VITE_LOCAL_API;
 
   const onFinish = async (values) => {
-    let data = await axios.post(`${import.meta.env.VITE_LOCAL_API}/api/v1/auth/login`, {
-      email: values.email,
-      password: values.password,
-    });
+    if (!apiBaseUrl) {
+      toast.error("API URL is missing. Set VITE_LOCAL_API in .env");
+      return;
+    }
 
-    dispatch(authInfo(data.data));
-    localStorage.setItem("userinfo", JSON.stringify(data.data));
+    try {
+      let data = await axios.post(`${apiBaseUrl}/api/v1/auth/login`, {
+        email: values.email,
+        password: values.password,
+      });
+      const loginData = data?.data;
 
-    if (data.data.error == "user does not exist") {
-      toast.error(data.data.error);
-    } else if (!data.data.emailVerified) {
-      toast.error("verify your email");
-    } else if (data.data.role == "user") {
-      toast.error("Please Upgrade to merchant to login");
-    } else {
-      navigate("/dashboard/viewbanner");
-      toast.success("Login success");
+      if (!loginData) {
+        toast.error("Unexpected login response");
+      } else if (loginData.error === "user does not exist") {
+        toast.error("User does not exist");
+      } else if (!loginData.emailVerified) {
+        toast.error("verify your email");
+      } else if (loginData.role === "user") {
+        toast.error("Please Upgrade to merchant to login");
+      } else {
+        const safeUserInfo = {
+          id: loginData.id,
+          username: loginData.username,
+          email: loginData.email,
+          role: loginData.role,
+          emailVerified: loginData.emailVerified,
+        };
+        navigate("/dashboard/viewbanner");
+        dispatch(authInfo(safeUserInfo));
+        localStorage.setItem("userinfo", JSON.stringify(safeUserInfo));
+        toast.success("Login success");
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.error || "Login failed");
     }
   };
 
-  const onFinishFailed = (errorInfo) => {
-    navigate(`/error/${errorInfo}`);
+  const onFinishFailed = () => {
+    toast.error("Please fill in required fields");
   };
 
   return (
