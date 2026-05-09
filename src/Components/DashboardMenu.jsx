@@ -23,7 +23,8 @@ function DashboardMenu() {
   
   const items = [
   
-    userinfo?.role !== 'merchant' && {
+    // userinfo?.role !== 'merchant' &&
+     {
       key: 'sub1',
       label: 'Admin',
       icon: <MailOutlined />,
@@ -83,7 +84,8 @@ function DashboardMenu() {
       ],
     },
     { type: 'divider' },
-    userinfo?.role !== 'merchant' && {
+    // userinfo?.role !== 'merchant' && 
+    {
       key: 'sub8',
       label: 'Discount',
       icon: <SettingOutlined />,
