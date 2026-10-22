@@ -1,115 +1,123 @@
-import React from 'react'
-import { ToastContainer, toast } from 'react-toastify';
-import { Button, Checkbox, Form, Input } from 'antd';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { ToastContainer, toast } from "react-toastify";
+import { Button, Form, Input } from "antd";
+import { useRegistrationMutation } from "../Slices/apiSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { Store, User, Mail, Lock, ArrowRight } from "lucide-react";
 
 function Registration() {
+  const navigate = useNavigate();
+  const [registration, { isLoading }] = useRegistrationMutation();
 
   const onFinish = async (values) => {
-    let data = await axios.post(`${import.meta.env.VITE_LOCAL_API}/api/v1/auth/registration`, {
-      username: values.username,
-      email: values.email,
-      password: values.password
-    },
-    {
-      headers: { auth: "12345678" }
-    })
+    try {
+      const res = await registration({
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      }).unwrap();
 
-    if (data.data.error == "Please enter a valid otp") {
-      toast.error("Please enter a valid otp")
-    } else {
-      toast.success("Registration done. Verify your Email")
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
+
+      toast.success("Registration successful! Check your email for OTP verification.");
+      setTimeout(() => navigate(`/otp/${values.email}`), 1200);
+    } catch (err) {
+      toast.error(err?.data?.error || "Registration failed");
     }
   };
 
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  };
-
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 px-4">
-      <ToastContainer position="top-right" autoClose={4000} theme="colored" />
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100 p-4 font-sans">
+      <ToastContainer position="top-right" autoClose={4000} />
 
-      {/* Modern Glassmorphism Card */}
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl shadow-2xl">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-white tracking-tight">
-            Create Account
+      <div className="w-full max-w-md bg-white border border-slate-200/80 p-8 rounded-3xl shadow-xl shadow-slate-200/50">
+        <div className="text-center mb-8">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white mx-auto mb-3 shadow-md shadow-emerald-500/20">
+            <Store className="w-6 h-6" />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+            Register Merchant
           </h1>
-          <p className="text-slate-300 mt-2 text-sm">
-            Fill in your details to get started
+          <p className="text-xs text-slate-500 mt-1">
+            Create an administrator account for your store
           </p>
         </div>
 
         <Form
-          name="basic"
+          name="register_form"
           layout="vertical"
-          initialValues={{ remember: true }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           autoComplete="off"
           requiredMark={false}
+          className="space-y-4"
         >
           <Form.Item
-            label={<span className="text-slate-200 font-medium">Username</span>}
+            label={<span className="text-xs font-semibold text-slate-700">Full Name</span>}
             name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            rules={[{ required: true, message: "Please input your full name" }]}
           >
-            <Input 
-              placeholder="johndoe"
-              className="h-12 rounded-lg border-slate-600 bg-white/5 text-white placeholder:text-slate-500 hover:border-blue-400 focus:border-blue-400" 
+            <Input
+              prefix={<User className="w-4 h-4 text-slate-400 mr-2" />}
+              placeholder="Merchant Name"
+              className="h-11 rounded-xl border-slate-200"
             />
           </Form.Item>
 
           <Form.Item
-            label={<span className="text-slate-200 font-medium">Email Address</span>}
+            label={<span className="text-xs font-semibold text-slate-700">Email Address</span>}
             name="email"
-            rules={[{ required: true, message: 'Please input your email!' }]}
+            rules={[{ required: true, message: "Please input your email address" }]}
           >
-            <Input 
-              placeholder="name@company.com"
-              className="h-12 rounded-lg border-slate-600 bg-white/5 text-white placeholder:text-slate-500 hover:border-blue-400 focus:border-blue-400" 
+            <Input
+              prefix={<Mail className="w-4 h-4 text-slate-400 mr-2" />}
+              placeholder="admin@example.com"
+              className="h-11 rounded-xl border-slate-200"
             />
           </Form.Item>
 
           <Form.Item
-            label={<span className="text-slate-200 font-medium">Password</span>}
+            label={<span className="text-xs font-semibold text-slate-700">Password</span>}
             name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[
+              { required: true, message: "Please enter your password" },
+              { min: 6, message: "Password must be at least 6 characters" },
+            ]}
           >
-            <Input.Password 
+            <Input.Password
+              prefix={<Lock className="w-4 h-4 text-slate-400 mr-2" />}
               placeholder="••••••••"
-              className="h-12 rounded-lg border-slate-600 bg-white/5 text-white placeholder:text-slate-500 hover:border-blue-400 focus:border-blue-400" 
+              className="h-11 rounded-xl border-slate-200"
             />
           </Form.Item>
 
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox className="text-slate-300">Remember me</Checkbox>
-          </Form.Item>
-
-          <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
-              className="w-full h-12 bg-blue-600 hover:bg-blue-500 border-none rounded-lg text-base font-semibold shadow-lg shadow-blue-900/20 transition-all"
+          <Form.Item className="pt-2">
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isLoading}
+              className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 border-none rounded-xl text-sm font-semibold shadow-xs flex items-center justify-center gap-2"
             >
-              Register
+              <span>Create Account</span>
+              <ArrowRight className="w-4 h-4" />
             </Button>
           </Form.Item>
 
-          <div className="mt-6 text-center border-t border-white/10 pt-6">
-            <p className="text-slate-400 text-sm">
-              Already have an account? 
-              <Link to='/login' className="ml-2 text-blue-400 hover:text-blue-300 font-medium transition-colors">
-                Login
-              </Link>
-            </p>
+          <div className="pt-4 border-t border-slate-100 text-center text-xs text-slate-500">
+            <span>Already registered? </span>
+            <Link
+              to="/login"
+              className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline"
+            >
+              Sign In
+            </Link>
           </div>
         </Form>
       </div>
     </div>
-  )
+  );
 }
 
 export default Registration;

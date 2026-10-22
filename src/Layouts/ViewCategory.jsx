@@ -1,76 +1,100 @@
-import { Flex, Space, Table, Tag } from 'antd';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { useGetCategoriesQuery } from '../Slices/apiSlice';
+import { Table, Space, Tag, Button } from 'antd';
+import { FolderTree, Plus, Layers, ArrowUpRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 function ViewCategory() {
-let [catViewData,setCatViewData]=useState([])
+  const navigate = useNavigate();
+  const userData = useSelector((state) => state.activeUser?.value);
+  const { data: categories = [], isLoading, isFetching } = useGetCategoriesQuery();
 
   const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-   
-  },
-  {
-    title: 'Owner Role',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
-      <Flex gap="small" align="center" wrap>
-        {tags.map(tag => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </Flex>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: () => (
-      <Space size="middle">
-        <a>Edit</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
+    {
+      title: 'Category Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (name) => (
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center font-bold text-xs">
+            {name.charAt(0).toUpperCase()}
+          </div>
+          <span className="font-bold text-slate-800 text-xs">{name}</span>
+        </div>
+      ),
+    },
+    {
+      title: 'Slug',
+      dataIndex: 'slug',
+      key: 'slug',
+      render: (slug) => (
+        <span className="font-mono text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+          {slug || 'n/a'}
+        </span>
+      ),
+    },
+    {
+      title: 'Authorized Role',
+      key: 'role',
+      render: () => (
+        <Tag color="cyan" className="font-semibold uppercase text-[10px] rounded-full">
+          {userData?.role || 'Admin'}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Status',
+      key: 'status',
+      render: () => (
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+          ● Active
+        </span>
+      ),
+    },
+  ];
 
-const userData = useSelector((state) => state.activeUser.value);
-
-  useEffect(()=>{
-   async function viewCatData(){
-    let viewData=await axios.get(`${import.meta.env.VITE_LOCAL_API}/api/v1/product/viewcategory`)
-    let arr=[]
-    
-    viewData.data.map((item)=>{
-      arr.push({
-        key:item._id,
-        name:item.name,
-        tags:[userData.role]
-      })
-      
-    })
-    setCatViewData(arr);
-    
-    }
-    viewCatData()
-  },[userData.role])
   return (
-    <div className='mt-10'>
-      <h1 className='text-center text-5xl mr-64 mb-5 font-sans font-semibold'>Category List</h1>
-        <Table columns={columns} dataSource={catViewData} />
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
+              <FolderTree className="w-6 h-6 text-emerald-600" />
+              Categories
+            </h1>
+            <Tag color="cyan" className="font-semibold rounded-full">
+              {categories.length} Categories
+            </Tag>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Top-level taxonomy categories synced via RTK Query cache.
+          </p>
+        </div>
+
+        <button
+          onClick={() => navigate('/addcategory')}
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Add Category</span>
+        </button>
+      </div>
+
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <Table
+          columns={columns}
+          dataSource={categories}
+          rowKey="_id"
+          loading={isLoading || isFetching}
+          pagination={{ pageSize: 8 }}
+          className="clean-table"
+        />
+      </div>
     </div>
-  )
+  );
 }
 
-export default ViewCategory
+export default ViewCategory;

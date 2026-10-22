@@ -1,52 +1,32 @@
-
-import { Col, Row } from 'antd';
+import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import DashboardMenu from '../Components/DashboardMenu';
+import Navbar from '../Components/Navbar';
 import { useSelector } from 'react-redux';
 
-
-
 function Home() {
-    const userData=useSelector((state)=>(state.activeUser.value))
-  let navigate=useNavigate()
- 
-//  if(!userData){
-//     navigate('/login')
-    
-//   }
+  const userData = useSelector((state) => state.activeUser?.value);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userData) {
+      navigate('/login');
+    }
+  }, [userData, navigate]);
 
   return (
-    <div className='w-[1504px] mx-auto border-2 border-blue-300 h-screen'>
-     <div className="min-h-screen w-full bg-white relative">
- 
-  <div
-    className="absolute inset-0"
-    style={{
-      backgroundImage: `
-        linear-gradient(45deg, transparent 49%, #e5e7eb 49%, #e5e7eb 51%, transparent 51%),
-        linear-gradient(-45deg, transparent 49%, #e5e7eb 49%, #e5e7eb 51%, transparent 51%)
-      `,
-      backgroundSize: "40px 40px",
-         WebkitMaskImage:
-            "radial-gradient(ellipse 80% 80% at 100% 100%, #000 50%, transparent 90%)",
-          maskImage:
-            "radial-gradient(ellipse 80% 80% at 100% 100%, #000 50%, transparent 90%)",
-    }}
-  />
-  {/* Your Content/Components */}
-
-      <Row >
-      <Col span={6}>
-      <DashboardMenu />
-      </Col>
-      <Col span={18}>
-      <Outlet/>
-      </Col>
-    </Row>
-     
-   </div>
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+      <Navbar />
+      <div className="flex-1 flex">
+        <DashboardMenu />
+        <main className="flex-1 min-w-0 overflow-y-auto bg-slate-50">
+          <div className="w-full max-w-[1580px] mx-auto px-6 sm:px-10 lg:px-12 py-8">
+            <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

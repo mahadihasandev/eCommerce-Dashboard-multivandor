@@ -1,118 +1,133 @@
+import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Button, Checkbox, Form, Input } from "antd";
-import axios from "axios";
+import { useLoginMutation } from "../Slices/apiSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authInfo } from "../Slices/AuthSlices";
+import { Store, ShieldCheck, Mail, Lock, ArrowRight } from "lucide-react";
 
 function Login() {
-  let navigate = useNavigate();
-  let dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [login, { isLoading }] = useLoginMutation();
 
   const onFinish = async (values) => {
-    let data = await axios.post(`${import.meta.env.VITE_LOCAL_API}/api/v1/auth/login`, {
-      email: values.email,
-      password: values.password,
-    });
+    try {
+      const user = await login({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
 
-    dispatch(authInfo(data.data));
-    localStorage.setItem("userinfo", JSON.stringify(data.data));
+      if (user.error) {
+        toast.error(user.error);
+        return;
+      }
 
-    if (data.data.error == "user does not exist") {
-      toast.error(data.data.error);
-    } else if (!data.data.emailVerified) {
-      toast.error("verify your email");
-    } else if (data.data.role == "user") {
-      toast.error("Please Upgrade to merchant to login");
-    } else {
-      navigate("/viewbanner");
-      toast.success("Login success");
+      if (!user.emailVerified) {
+        toast.error("Please verify your email before logging in.");
+        return;
+      }
+
+      if (user.role === "user") {
+        toast.error(
+          "Customer accounts cannot access the merchant dashboard. Please use a merchant or admin account."
+        );
+        return;
+      }
+
+      dispatch(authInfo(user));
+      localStorage.setItem("userinfo", JSON.stringify(user));
+      toast.success("Welcome back! Login successful.");
+      setTimeout(() => navigate("/"), 600);
+    } catch (err) {
+      toast.error(err?.data?.error || "Invalid username or password");
     }
   };
 
-  const onFinishFailed = (errorInfo) => {
-    navigate(`/error/${errorInfo}`);
-  };
-
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 via-[#0c3635] to-slate-900 px-4">
-      <ToastContainer
-        position="top-right"
-        autoClose={4000}
-        theme="colored"
-      />
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100 p-4 font-sans">
+      <ToastContainer position="top-right" autoClose={4000} />
 
-      {/* Modern Login Card */}
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-lg border border-white/10 p-8 rounded-2xl shadow-2xl">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-white tracking-tight">
-            Merchant Login
+      <div className="w-full max-w-md bg-white border border-slate-200/80 p-8 rounded-3xl shadow-xl shadow-slate-200/50">
+        {/* Brand Header */}
+        <div className="text-center mb-8">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white mx-auto mb-3 shadow-md shadow-emerald-500/20">
+            <Store className="w-6 h-6" />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+            Merchant Sign In
           </h1>
-          <p className="text-slate-300 mt-2 text-sm">
-            Enter your credentials to access the dashboard
+          <p className="text-xs text-slate-500 mt-1">
+            Access your NexStore store management dashboard
           </p>
         </div>
 
         <Form
-          name="basic"
+          name="login_form"
           layout="vertical"
           initialValues={{ remember: true }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           autoComplete="off"
           requiredMark={false}
+          className="space-y-4"
         >
           <Form.Item
-            label={<span className="text-slate-200 font-medium">Email Address</span>}
+            label={<span className="text-xs font-semibold text-slate-700">Email Address</span>}
             name="email"
-            rules={[{ required: true, message: "Please input your email!" }]}
+            rules={[{ required: true, message: "Please input your email address" }]}
           >
-            <Input 
-              placeholder="name@company.com"
-              className="h-12 rounded-lg border-slate-600 bg-white/5 text-white placeholder:text-slate-500 hover:border-emerald-400 focus:border-emerald-400" 
+            <Input
+              prefix={<Mail className="w-4 h-4 text-slate-400 mr-2" />}
+              placeholder="admin@example.com"
+              className="h-11 rounded-xl border-slate-200"
             />
           </Form.Item>
 
           <Form.Item
-            label={<span className="text-slate-200 font-medium">Password</span>}
+            label={<span className="text-xs font-semibold text-slate-700">Password</span>}
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[{ required: true, message: "Please enter your password" }]}
           >
-            <Input.Password 
+            <Input.Password
+              prefix={<Lock className="w-4 h-4 text-slate-400 mr-2" />}
               placeholder="••••••••"
-              className="h-12 rounded-lg border-slate-600 bg-white/5 text-white placeholder:text-slate-500 hover:border-emerald-400 focus:border-emerald-400" 
+              className="h-11 rounded-xl border-slate-200"
             />
           </Form.Item>
 
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between text-xs">
             <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox className="text-slate-300">Remember me</Checkbox>
+              <Checkbox className="text-slate-600">Remember credentials</Checkbox>
             </Form.Item>
-            <Link 
-              to="/forgetpassword" 
-              className="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+            <Link
+              to="/forgetpassword"
+              className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline"
             >
               Forgot password?
             </Link>
           </div>
 
-          <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
-              className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 border-none rounded-lg text-base font-semibold shadow-lg shadow-emerald-900/20 transition-all"
+          <Form.Item className="pt-2">
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isLoading}
+              className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 border-none rounded-xl text-sm font-semibold shadow-xs flex items-center justify-center gap-2"
             >
-              Sign In
+              <span>Access Dashboard</span>
+              <ArrowRight className="w-4 h-4" />
             </Button>
           </Form.Item>
 
-          <div className="mt-6 text-center border-t border-white/10 pt-6">
-            <p className="text-slate-400 text-sm">
-              New here? 
-              <Link to="/" className="ml-2 text-emerald-400 hover:text-emerald-300 font-medium transition-colors underline">
-                Create an account
-              </Link>
-            </p>
+          <div className="pt-4 border-t border-slate-100 text-center text-xs text-slate-500">
+            <span>Don't have a merchant account? </span>
+            <Link
+              to="/registration"
+              className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline"
+            >
+              Register here
+            </Link>
           </div>
         </Form>
       </div>
