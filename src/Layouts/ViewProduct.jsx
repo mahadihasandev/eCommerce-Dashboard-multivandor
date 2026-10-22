@@ -95,7 +95,7 @@ function ViewProduct() {
         const imgUrl = raw
           ? raw.startsWith("http")
             ? raw
-            : `${import.meta.env.VITE_LOCAL_API || "http://localhost:8000"}${raw.startsWith("/") ? "" : "/"}${raw}`
+            : `${import.meta.env.VITE_LOCAL_API || "https://e-commerce-backend-multivandor.vercel.app"}${raw.startsWith("/") ? "" : "/"}${raw}`
           : null;
 
         return (

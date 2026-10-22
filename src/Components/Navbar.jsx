@@ -35,7 +35,7 @@ function Navbar() {
         </div>
 
         <a
-          href="http://localhost:3000"
+          href={import.meta.env.VITE_STOREFRONT_URL || "https://next-frontend-express-project-saii.vercel.app"}
           target="_blank"
           rel="noopener noreferrer"
           className="hidden md:inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-emerald-700 bg-slate-50 hover:bg-emerald-50 border border-slate-200/80 px-4 py-2 rounded-xl transition-all shadow-xs"

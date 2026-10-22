@@ -17,7 +17,7 @@ function ViewVariant() {
         const imgUrl = text
           ? text.startsWith('http')
             ? text
-            : `${import.meta.env.VITE_LOCAL_API || 'http://localhost:8000'}${text.startsWith('/') ? '' : '/'}${text}`
+            : `${import.meta.env.VITE_LOCAL_API || 'https://e-commerce-backend-multivandor.vercel.app'}${text.startsWith('/') ? '' : '/'}${text}`
           : null;
 
         return (

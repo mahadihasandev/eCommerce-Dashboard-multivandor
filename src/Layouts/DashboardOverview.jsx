@@ -112,7 +112,7 @@ function DashboardOverview() {
             <span>Manage Orders</span>
           </button>
           <a
-            href="http://localhost:3000"
+            href={import.meta.env.VITE_STOREFRONT_URL || "https://next-frontend-express-project-saii.vercel.app"}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition-all"

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const baseUrl = import.meta.env.VITE_LOCAL_API || 'http://localhost:8000';
+const baseUrl = import.meta.env.VITE_LOCAL_API || 'https://e-commerce-backend-multivandor.vercel.app';
 
 export const apiSlice = createApi({
   reducerPath: 'api',
